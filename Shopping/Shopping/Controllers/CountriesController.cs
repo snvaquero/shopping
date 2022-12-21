@@ -1,4 +1,4 @@
-﻿  using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shopping.Data;
 using Shopping.Data.Entities;
@@ -22,9 +22,9 @@ namespace Shopping.Controllers
         // GET: Countries
         public async Task<IActionResult> Index()
         {
-return View (await _context.Countries
-            .Include(c => c.States)
-            .ToListAsync());
+            return View(await _context.Countries
+                        .Include(c => c.States)
+                        .ToListAsync());
             //return View(await _context.Countries.ToListAsync());
         }
         [HttpGet]
@@ -50,7 +50,7 @@ return View (await _context.Countries
         // GET: Countries/Create
         public IActionResult Create()
         {
-            Country country = new() { States = new List<State>()};
+            Country country = new() { States = new List<State>() };
             return View(country);
         }
         [HttpPost]
@@ -97,9 +97,9 @@ return View (await _context.Countries
             }
 
             Country country = await _context.Countries.FindAsync(id);
-                if (country == null)
+            if (country == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
             StateViewModel model = new()
             {
@@ -108,7 +108,7 @@ return View (await _context.Countries
 
             return View(model);
 
-   
+
         }
         [HttpPost]
 
@@ -129,7 +129,7 @@ return View (await _context.Countries
                     };
                     _context.Add(state);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Details), new {Id = model.CountryId});
+                    return RedirectToAction(nameof(Details), new { Id = model.CountryId });
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
@@ -167,10 +167,10 @@ return View (await _context.Countries
             return View(country);
         }
 
-       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,  Country country)
+        public async Task<IActionResult> Edit(int id, Country country)
         {
             if (id != country.Id)
             {
@@ -201,8 +201,8 @@ return View (await _context.Countries
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
-             
-            
+
+
             return View(country);
         }
 
@@ -215,9 +215,9 @@ return View (await _context.Countries
             }
 
 
-            State state= await _context.States
+            State state = await _context.States
                 .Include(s => s.Country)
-                .FirstOrDefaultAsync (s => s.Id == id);
+                .FirstOrDefaultAsync(s => s.Id == id);
             if (state == null)
             {
                 return NotFound();
@@ -249,7 +249,7 @@ return View (await _context.Countries
                     State state = new()
                     {
                         Id = model.Id,
-                    Name = model.Name,
+                        Name = model.Name,
 
                     };
                     _context.Update(model);
@@ -282,13 +282,13 @@ return View (await _context.Countries
         // GET: Countries/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Countries == null)
+            if (id == null )
             {
                 return NotFound();
             }
 
             Country country = await _context.Countries
-                .Include (c => c.States)
+                .Include(c => c.States)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (country == null)
@@ -318,5 +318,5 @@ return View (await _context.Countries
             return RedirectToAction(nameof(Index));
         }
 
-           }
+    }
 }

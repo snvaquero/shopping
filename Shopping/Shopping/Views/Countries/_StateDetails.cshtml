@@ -1,20 +1,18 @@
-﻿@model Shopping.Data.Entities.Country
-<h4>Pais</h4>
+﻿@model Shopping.Data.Entities.State
+<h4>Departamentos/Estado</h4>
 <hr />
 <dl class="row">
     <dt class="col-sm-2">
         @Html.DisplayNameFor(model => model.Name)
     </dt>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.CitiesNumber)
+    </dt>
     <dd class="col-sm-10">
         @Html.DisplayFor(model => model.Name)
     </dd>
-
-    <dt class="col-sm-2">
-        @Html.DisplayNameFor(model => model.StatesNumber)
-    </dt>
-   
     <dd class="col-sm-10">
-        @Html.DisplayFor(model => model.StatesNumber)
+        @Html.DisplayFor(model => model.CitiesNumber)
     </dd>
 </dl>
 
