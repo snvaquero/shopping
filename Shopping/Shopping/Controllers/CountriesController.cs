@@ -31,7 +31,7 @@ namespace Shopping.Controllers
         // GET: Countries/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Countries == null)
+            if (id == null )
             {
                 return NotFound();
             }
@@ -154,12 +154,12 @@ namespace Shopping.Controllers
         // GET: Countries/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Countries == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var country = await _context.Countries.FindAsync(id);
+            Country country = await _context.Countries.FindAsync(id);
             if (country == null)
             {
                 return NotFound();
@@ -209,7 +209,7 @@ namespace Shopping.Controllers
         // GET: Countries/Edit/5
         public async Task<IActionResult> EditState(int? id)
         {
-            if (id == null || _context.Countries == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -225,7 +225,6 @@ namespace Shopping.Controllers
             StateViewModel model = new()
             {
                 CountryId = state.Country.Id,
-
                 Id = state.Id,
                 Name = state.Name,
             };
@@ -252,7 +251,7 @@ namespace Shopping.Controllers
                         Name = model.Name,
 
                     };
-                    _context.Update(model);
+                    _context.Update(state);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Details), new { id = model.CountryId });
                 }
