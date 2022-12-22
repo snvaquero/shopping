@@ -38,6 +38,7 @@ namespace Shopping.Controllers
 
             Country country = await _context.Countries
                 .Include(c => c.States)
+                .ThenInclude(s => s.Cities)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (country == null)
             {
@@ -55,6 +56,7 @@ namespace Shopping.Controllers
             }
 
             State state = await _context.States
+                 .Include(s => s.Country)
                 .Include(s => s.Cities)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (state == null)
@@ -154,6 +156,66 @@ namespace Shopping.Controllers
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
                         ModelState.AddModelError(string.Empty, "Ya existe un departamento/estado con el mismo nombre en este pais");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+            }
+            return View(model);
+        }
+        public async Task<IActionResult> AddCity(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            State state = await _context.States.FindAsync(id);
+            if (state == null)
+            {
+                return NotFound();
+            }
+            CityViewModel model = new()
+            {
+                StateId = state.Id,
+            };
+
+            return View(model);
+
+
+        }
+        [HttpPost]
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCity(CityViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    City city = new()
+                    {
+                       
+                        State = await _context.States.FindAsync(model.StateId),
+                        Name = model.Name,
+                    };
+                    _context.Add(city);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(DetailsState), new { Id = model.StateId });
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Ya existe una con el mismo nombre en este pais");
                     }
                     else
                     {
