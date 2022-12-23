@@ -10,5 +10,6 @@ namespace Shopping.Models
         [Required(ErrorMessage = "El campo {0} es obligatorio ")]
         public string Name { get; set; }
         public int StateId { get; set; }
+      
     }
 }
